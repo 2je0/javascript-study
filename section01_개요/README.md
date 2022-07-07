@@ -33,3 +33,8 @@
 이는 브라우저와 반대로 로컬의 파일에 접근할수도있고 운영체제와 상호작용할 수도 있지만 html과 css를 조작할 수는 없음
 
 ![](images/2022-07-05-02-06-23.png)
+
+## client-side , server-side
+
+client side(brower) : 자바스크립트의 목적, 각자 자바스크립트 엔진을 이용하여 웹페이지와 상호작용하길 원함
+server side(Nodejs) : 브라우저 밖에서 js의 지식을 재활용 하기 위함
