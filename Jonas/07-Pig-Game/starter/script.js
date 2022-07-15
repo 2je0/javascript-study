@@ -101,7 +101,7 @@ btnHold.addEventListener('click', () => {
   holdScoreandDisplayUpdate();
   currentScoreInit();
 
-  if (totalScore[currentPlayer] >= 10) {
+  if (totalScore[currentPlayer] >= 100) {
     winnerClassChange();
     diceImg.classList.add('hidden');
     playing = false;
