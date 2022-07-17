@@ -87,3 +87,22 @@ const x = first();
 위와 같은 코드가 있다고 했을 때, 전역 컨텍스트에서는 name이 정의되고 first와 second는 함수인지 판단하며 x 는 정의되지 않는다. 그리고 Call Stack에 전역 컨텍스트가 들어가게되고 first 함수가 실행됨에 따라서 새로운 실행컨텍스트가 생기며 콜스택에 들어간다.
 
 어떤 함수가 끝날 때 이전에 실행했던 (그 함수를 호출했었던) 부분으로 어떻게 돌아갈까? 실행 컨텍스트는 함수가 실행되면서 생성되고 콜스택에 쌓이며 함수가 끝나면 해당 실행컨텍스트는 스택에서 없어진다. 따라서 원래 실행되고 있었던 실행컨텍스트로 돌아갈 수 있다.
+
+## Scope and Scope Chain
+
+변수는 어디에 있으며 특정 변수에 액세스할 수 있는 위치와 액세스할 수 없는 위치는 어디일까?
+
+scope 와 variable environment의 차이는 뭘까?
+
+scope와 scope of variable은 다르다.
+block scope라는 것은 es6이후 도입되었으므로 es6 변수인 let과 const에만 적용된다. var는 적용되지 않는다. var는 block scope가 아니라 function scope로 분류되기 때문에 `decade`와 다르게 `second` 함수에서 사용이 가능하다.
+
+scope chain이라는 것은 바깥에서 정의된 변수들을 안쪽 스코프에서 사용할 수 있음을 말한다.
+다음 사진을 보면 이해할 수 있다. 해당 scope에서 변수를 찾을 수 없는 경우 scope chain을 따라 위쪽으로 이동하면서 global scope까지 올라간다. 그 때까지 변수를 찾지못하면 reference error가 생긴다. 그리고 이 방향성은 단방향이다 바깥쪽 함수에서 안쪽에 있는 변수를 이용하진 못한다.
+
+![](images/3tyoe.png)
+![](images/2022-07-18-00-12-21.png)
+
+주의할 점이 있는데 call stack과 scope chain은 무관하다는 것이다. 아래 사진을 보면 third는 second안에서 실행되었지만 scope가 first와 평행하기 때문에 변수에 접근할 수 없다
+![](images/2022-07-18-00-07-53.png)
+![](images/2022-07-18-00-29-54.png)
