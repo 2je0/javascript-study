@@ -55,3 +55,35 @@ parsing, compilation, optimization은 코드가 접근할 수 없는 특별한 �
 이 이벤트 루프는 자바스크립트를 non-blocking으로 만든다.
 
 node js 의 런타임 같은 경우에는 web apis 가 없고 그 자리에 c++ bindings & thread pool 이 있다.
+
+## Execution context 와 Call Stack
+
+[설명](https://velog.io/@stampid/Execution-Context%EC%8B%A4%ED%96%89-%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%9E%80)
+컴파일을 마친 이후에 javascript 파일 안에서 함수가 아닌 코드를 실행하기 위해선 전역 실행 컨텍스트 (global execution context)가 생성된다.(한개만 생성됨) 실행 컨텍스트는 코드가 실행되기 위해서 필요한 정보들을 저장하는 상자와 같다. 피자상자 = 피자 + 포크 라고 한다면 상자는 실행 컨텍스트 피자는 코드라고 할 수 있다.
+
+그리고 함수가 아닌 코드들이 실행되고 나면 함수의 호출에 의해 각각의 실행컨텍스트가 생성이된다. 그리고 그 함수들은 Call Stack에 쌓이게 된다. 이제 모든 함수가 실행되고나면 콜백함수를 기다린다.
+
+### what's inside execution context?
+
+- variable environment (let, comst, var, function, arguments object)
+- scope chain
+- this keyword
+  실행 컨텍스트 안에 무엇이 있는지 알아봅시다. ( arrow function에는 arguments object와 this keyword가 없다.)
+
+```javascript
+const name = "jeyoung";
+const first = () => {
+  let a = 1;
+  const b = second(1, 2);
+  return a + b;
+};
+function second(x, y) {
+  const c = 2;
+  return c;
+}
+const x = first();
+```
+
+위와 같은 코드가 있다고 했을 때, 전역 컨텍스트에서는 name이 정의되고 first와 second는 함수인지 판단하며 x 는 정의되지 않는다. 그리고 Call Stack에 전역 컨텍스트가 들어가게되고 first 함수가 실행됨에 따라서 새로운 실행컨텍스트가 생기며 콜스택에 들어간다.
+
+어떤 함수가 끝날 때 이전에 실행했던 (그 함수를 호출했었던) 부분으로 어떻게 돌아갈까? 실행 컨텍스트는 함수가 실행되면서 생성되고 콜스택에 쌓이며 함수가 끝나면 해당 실행컨텍스트는 스택에서 없어진다. 따라서 원래 실행되고 있었던 실행컨텍스트로 돌아갈 수 있다.
