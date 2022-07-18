@@ -213,3 +213,173 @@ function deleteShoppingCart() {
   console.log("All products deleted!");
 }
 ```
+
+#
+
+# this 키워드
+
+method 에서 this 키워드를 사용하면 this는 그 메소드를 호출한 객체가 된다.
+일반 함수에서 this는 undefined이지만 만약 strict 모드를 사용하지 않는다면 window객체를 가리킬수 있고 이는 심각한 문제를 야기할 수도 있다.
+arrow 함수에서는 기본적으로 this를 가질수 없지만 사용하게 된다면 lexical this로서 더 상위 혹은 전역 객체를 잡을 수 있다.
+event listener에서는 DOM을 가리킨다.
+![](images/2022-07-18-17-53-25.png)
+
+```js
+console.log(this);
+
+const calcAge = function (birthYear) {
+  console.log(this);
+};
+calcAge(1991);
+
+const calcAgeArrow = (birthYear) => {
+  console.log(this);
+};
+calcAgeArrow(1980);
+```
+
+![](images/2022-07-18-18-12-46.png)
+그냥 this를 호출하면 this를 호출하는 객체이므로 window가 나오는게 맞다.
+strict모드를 사용하고 있으므로 함수 내부에서 this 를 호출 했을 때는 정의되지 않는게 맞다.
+arrow 함수에서는 자체 this 키워드가 없으므로 상위 객체의 this를 갖는다. 전역에서 호출한것과 같이 window가 나온다.
+
+### 객체에서 this 보기
+
+```js
+const a = {
+  name: "a",
+  showObject: function () {
+    console.log(this);
+  },
+};
+a.showObject();
+
+const b = { name: "b" };
+b.showObject = a.showObject;
+b.showObject();
+
+const f = b.showObject;
+f();
+```
+
+![](images/2022-07-18-19-13-43.png)
+
+#
+
+# 일반함수 vs arrow 함수
+
+arrow 함수는 this 키워드가 없기 때문에 상위 객체의 this를 이용하는데 여기서 상위 객체는 window 이다. 따라서 window.name을 부르는것과 같다. 여기서 var를 사용하면 안되는 이유가 하나 더 나오는데 var 변수를 선언할 경우 window객체에 속성을 만들어 낸다.
+
+```js
+const me = {
+  name: "jeyoung",
+  printNameArr: () => {
+    console.log("hi", this.name);
+  },
+  printNameDecl: function () {
+    console.log("hi", this.name);
+  },
+};
+
+me.printNameArr();
+me.printNameDecl();
+```
+
+![](images/2022-07-18-19-30-52.png)
+
+var 변수를 정의 하였을 경우 다음과 같은 결과를 얻게 된다.
+
+```js
+var name = "nayoung";
+const me = {
+  name: "jeyoung",
+  printNameArr: () => {
+    console.log("hi", this.name);
+  },
+  printNameDecl: function () {
+    console.log("hi", this.name);
+  },
+};
+
+me.printNameArr();
+me.printNameDecl();
+```
+
+![](images/2022-07-18-19-32-55.png)
+
+## 함수 내에서 함수를 호출할 때 this
+
+다음과 같은 코드를 보자. `nextlevel`을 호출하고 있는 것은 printName이라는 함수이다. 그런데 일반함수의 this는 undefined이므로 아래 사진과 같은 결과가 나온다.
+
+```js
+const me = {
+  name: "jeyoung",
+  printName: function () {
+    console.log("hi", this.name);
+
+    const nextLevel = function () {
+      console.log("next:", this);
+    };
+    nextLevel();
+  },
+};
+
+me.printName();
+```
+
+![](images/2022-07-18-19-40-31.png)
+
+이것을 해결하기 위한 방법은 두가지가 있다.
+
+- 첫번째로 es6 이전의 방식으로 새로운 변수에 this를 저장하는 것이다.
+- 두번째로는 arrow 함수를 이용하는 것이다.
+
+```js
+const me = {
+  name: "jeyoung",
+  printName: function () {
+    console.log("hi", this.name);
+
+    const self = this;
+    const nextLevel = function () {
+      console.log("next:", self.name);
+    };
+    nextLevel();
+  },
+};
+
+me.printName();
+```
+
+```js
+const me = {
+  name: "jeyoung",
+  printName: function () {
+    console.log("hi", this.name);
+
+    const nextLevel = () => {
+      console.log("next:", this.name);
+    };
+    nextLevel();
+  },
+};
+
+me.printName();
+```
+
+## arguments 키워드
+
+```js
+const addExpr = function (a, b) {
+  console.log(arguments);
+  return a + b;
+};
+
+console.log(addExpr(1, 2));
+```
+
+![](images/2022-07-18-20-46-30.png)
+그리고 실제로 인수를 더 많이 넣었을 때 arguments 키워드를 이용하여 조회할 수 있다.
+
+하지만 이는 arrow 함수에는 존재하지 않는다.
+![](images/2022-07-18-20-47-27.png)
