@@ -111,3 +111,105 @@ scope chain이라는 것은 바깥에서 정의된 변수들을 안쪽 스코프
 
 바깥쪽 함수의 변수와 같은 이름으로 내부 함수에서 정의했을 때는 이름만 같고 스코프가 다르기 때문에 정의할 수 있다.
 바깥쪽 함수의 변수를 재할당하면 값을 바꿀 수 있다.
+
+# 호이스팅
+
+일반적으로 호이스팅이라고 하면 함수와 변수를 코드의 맨위로 올리는 작업이라고 생각한다.  
+하지만 뒷배경은 그렇지 않다.  
+실행 컨텍스트 생성 단계에서 변수 선언이 실행되기 전에 코드는 기본적으로 스캔되는 과정을 겪는다. 그런 변수 환경 개체(variable environment)에서 다음 코드에서 찾은 각 변수에 대해 새 속성이 생성된다.
+![](<images/![](images/2022-07-18-13-59-53.png).png>)
+
+![](images/2022-07-18-16-35-14.png)
+위의 사진을 보면 job이란 변수는 이후 초기화가 된다. 따라서 cannot access before init 오류가 뜨게 되는 것이고, x는 이후에도 초기화 되지 않기 때문에 not defined 오류가 뜨는 것이다. 컴파일 단계에서 이를 다 파악하고 오류를 내보낸다. 하지만 var 변수는 undefined로 호이스팅 되기 때문에 선언 전에도 사용할 수가 있다.
+
+그게 무슨 상관이 있지?
+그렇다면 호이스팅은 왜 사용하지? 에 대한 의문점은 let과 const 이후 설명한다.
+
+### TDZ(Temporal dead zone)
+
+let과 const는 호이스팅을 사용하지 않고 선언되기 전에는 Temporal Dead Zone에 있다고 한다. (TDZ) 따라서 선언 전에는 변수를 사용할수가 없는데 이 TDZ는 왜 필요한것일까?  
+첫번째로는 오류를 잡아내기 쉽게 만들어주기 때문이다.  
+두번째는 const라는 상수는 초기화 이후 바뀌면 안되는데 undefined였다가 바뀌는 것은 모순적인 일이기 때문에 정말로 const의 역할을 잘 수행하게 하기 위해서 이다.
+
+#
+
+### 왜 호이스팅?
+
+그렇게 오류를 잡아내기 쉬운 방식이 있는데 왜 var이란 변수가 나왔고, 왜 호이스팅을 하게 되는 것일까? 이는 함수를 보아야하는데 가끔 일부 프로그래밍 기술의 경우 상호 재귀와 같은 기법을 사용해야 하는데 이를 해결하는 방법이 호이스팅이었다. 그래서 함수의 선언 위치와 상관없이 이를 이용할수 있도록 한것인데 var이란 변수는 이 해결 기법의 부산물인 것이다. 자바스크립트는 지금만큼 많은 사람들이 이용할줄 몰랐기 때문이다.
+
+#
+
+### 실습
+
+const도 마찬가지이다. var은 호이스팅으로 undefined이지만 let과 const는 TDZ에 있다.
+
+```js
+console.log(a);
+console.log(b);
+// console.log(c);
+
+var a = 1;
+let b = 2;
+const c = 3;
+```
+
+![](images/2022-07-18-17-04-29.png)
+
+함수의 경우를 보자.
+
+```js
+console.log(addDecl(1, 2));
+console.log(addExp(1, 2));
+console.log(addArr(1, 2));
+
+function addDecl(a, b) {
+  return a + b;
+}
+
+const addExp = function (a, b) {
+  return a + b;
+};
+
+const addArr = (a, b) => a + b;
+```
+
+![](images/2022-07-18-17-07-51.png)
+
+그렇다면 var로 초기화 하면 호이스팅 되지 않을까?
+
+```js
+console.log(addDecl(1, 2));
+console.log(addExp(1, 2));
+console.log(addArr(1, 2));
+
+function addDecl(a, b) {
+  return a + b;
+}
+
+var addExp = function (a, b) {
+  return a + b;
+};
+
+var addArr = (a, b) => a + b;
+```
+
+![](images/2022-07-18-17-08-52.png)
+
+호이스팅 되기는 하지만 undefined이기 떄문에 함수로 판단하지 못하고 undefined(1,2); 를 하는 것과 같이 된다.
+
+#
+
+## var 변수가 문제가 될 수 있는 상황
+
+다음과 같은 상황에서는 `deleteShoppingCart` 호출을 하는 함수를 어쩌다가 만들었다면 numProducts가 TDZ에 있는것이 아니고 `undefined`이기 때문에 10개를 가지고 있을 예정이지만 모든 상품이 지워질 수가 있다.
+
+```js
+console.log(undefined);
+if (!numProducts) deleteShoppingCart();
+
+var numProducts = 10;
+
+function deleteShoppingCart() {
+  console.log("All products deleted!");
+}
+```
