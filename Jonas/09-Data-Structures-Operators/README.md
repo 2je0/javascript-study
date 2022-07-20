@@ -271,3 +271,198 @@ console.log(guestNum || 10);
 ## && 연산자
 
 || 연산자와 정확히 반대로 움직임: 처음으로 falsy 한 값이 나올때가지 뒤로 넘기다가 처음으로 falsy 한 값이 나오면 반환함, 아무것도 없으면 마지막 값을 반환
+
+## nullish coalescing operator
+
+|| 연산자와 사용법은 동일하지만 이전에 살펴봤듯이 0이나 '' 빈 문자열도 falsy value이기 때문에 || 연산자로 연산하면 뒤쪽에 있는 내용이 나왔다. guest의 숫자가 0이라고 표현하고 싶은데도 불구하고 말이다.
+이 때 사용할 수 있는것이 nullish 연산자(??) 인데 , `null`과 `undefined`만 false로 취급한다.
+
+## 복합 연산자
+
+객체에 그 정보가 들어있는지 없는지 판단하여 값을 바꿔줄 수 있다. 다음과 같은 경우 복합연산자 `||=` 을 사용할 수도 있다.
+
+```js
+const rest1 = { name: "aaa", numOfGuest: 20 };
+const rest2 = { name: "bbb", owner: "jeyoung" };
+
+rest1.numOfGuest = rest1.numOfGuest || 10;
+rest2.numOfGuest = rest2.numOfGuest || 10;
+
+console.log(rest1, rest2);
+```
+
+```js
+rest1.numOfGuest ||= 10;
+rest2.numOfGuest ||= 10;
+```
+
+![](images/2022-07-20-23-05-59.png)
+
+하지만 `numOfguest`가 0일 경우에 falsy 한 값이므로 ??=을 이용하면 해결 할 수 있다.
+
+### &&= 복합 연산자
+
+위와 같은 객체가 있을 때 `owner`에 대한 정보를 가려주고싶다 할 때 `&&=` 연산자를 사용할 수 있다.
+
+```js
+rest1.owner &&= "<anonymous>";
+rest2.owner &&= "<anonymous>";
+```
+
+## challenge
+
+> The team with the lower odd is more likely to win. Print to the console which
+> team is more likely to win, without using an if/else statement or the ternary
+> operator.
+
+```js
+team1 < team2 && console.log("Team1 is more likely to win");
+team1 > team2 && console.log("Team2 is more likely to win");
+```
+
+# for loop
+
+배열일 때는 for of
+배열에서 for-of loop를 사용하면 다음과같이 모든 항목을 추출할 수 있다.
+
+```js
+const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+for (const item of menu) console.log(item);
+```
+
+하지만 이는 인덱스를 얻지 못하는 단점이 있는데, `menu.entries()`를 사용하면 인덱스 또한 얻을 수 있다.
+
+```js
+const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+console.log([...menu.entries()]);
+```
+
+![](images/2022-07-21-01-46-05.png)
+
+또한 구조분해할당을 이용해서 인덱스를 뽑아낼 수 있다.
+
+```js
+for (const [idx, item] of menu.entries()) console.log(item);
+```
+
+# Enhanced Object Literals
+
+세가지 방법
+openingHours를 따로 빼서 객체에 추가할 수 있음, 이때 원래 이름이랑 객체에 넣을 이름이랑 같다면 그냥 객체명만 써도 됨
+
+```js
+const openingHours = {
+  thu: {
+    open: 12,
+    close: 22,
+  },
+  fri: {
+    open: 11,
+    close: 23,
+  },
+  sat: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
+const restaurant = {
+  name: "Classico Italiano",
+  location: "Via Angelo Tavanti 23, Firenze, Italy",
+  categories: ["Italian", "Pizzeria", "Vegetarian", "Organic"],
+  starterMenu: ["Focaccia", "Bruschetta", "Garlic Bread", "Caprese Salad"],
+  mainMenu: ["Pizza", "Pasta", "Risotto"],
+  openingHours,
+};
+```
+
+2. function 키워드를 생략해도 됨
+
+```js
+const restaurant = {
+  name: "Classico Italiano",
+  location: "Via Angelo Tavanti 23, Firenze, Italy",
+  categories: ["Italian", "Pizzeria", "Vegetarian", "Organic"],
+  starterMenu: ["Focaccia", "Bruschetta", "Garlic Bread", "Caprese Salad"],
+  mainMenu: ["Pizza", "Pasta", "Risotto"],
+  openingHours,
+
+  orderDelivery({ starterIdx, mainIdx, name, address, time }) {
+    const starter = this.starterMenu[starterIdx];
+    const main = this.mainMenu[mainIdx];
+    const message = `Order received! ${starter} and ${main} will be delivered to ${address} at ${time}`;
+    console.log(message);
+  },
+  orderPasta(ing1, ing2, ing3) {
+    const message = `Pasta ing : ${ing1} ${ing2} ${ing3}`;
+    console.log(message);
+  },
+  orderPizza(main, ...others) {
+    console.log(main);
+    console.log(others);
+  },
+};
+```
+
+3. 객체 속성명을 동적으로 설정해 줄 수 있다.
+
+```js
+const weekdays = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+const openingHours = {
+  [weekdays[2]]: {
+    open: 12,
+    close: 22,
+  },
+  [weekdays[5]]: {
+    open: 11,
+    close: 23,
+  },
+  [`weekdays-${1 + 2}`]: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
+```
+
+## optional chaining
+
+객체.속성.속성. ... 에서 실제로 존재하지 않는값인지 아닌지 판단해주려면 if문을 사용하면 된다.
+
+```js
+if (restaurant.openingHours.mon) console.log(restaurant.openingHours.mon.open);
+```
+
+하지만 매번 이렇게 하는것은 너무 길기 때문에 optional chaining을 이용한다.
+
+```js
+for (const day of weekdays) {
+  const open = restaurant.openingHours[day]?.open ?? "closed";
+  console.log(`${day} open at ${open}`);
+}
+```
+
+![](images/2022-07-21-02-41-45.png)
+
+### 함수에서 optional chaining
+
+```js
+console.log(restaurant.order?.() ?? "no method");
+```
+
+# 객체 반복
+
+`Object.keys()` 를 사용하면 key를 뽑아낼 수 있다.
+`Object.values()` 사용하면 value 뽑아낼 수 있다.
+`Object.entries()` 사용하면 [key,value] 를 뽑아낼 수 있다.
+
+```js
+const keys = Object.keys(restaurant);
+const values = Object.values(restaurant);
+const openDays = Object.entries(openingHours);
+console.log(keys);
+console.log(values);
+for (const [day, { open, close }] of openDays) {
+  console.log(`${day} open at ${open} and close at ${close}`);
+}
+```
+
+![](images/2022-07-21-03-14-37.png)
