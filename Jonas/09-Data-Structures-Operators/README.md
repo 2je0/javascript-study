@@ -466,3 +466,68 @@ for (const [day, { open, close }] of openDays) {
 ```
 
 ![](images/2022-07-21-03-14-37.png)
+
+## set => 배열에서 중복 제거
+
+```js
+const staff = ["waiter", "waiter", "waiter", "chef", "chef", "manager"];
+const staffUnique = new Set(staff);
+const staffUniqueArray = [...staffUnique];
+staffUnique.add("costomer");
+staffUnique.delete("waiter");
+console.log(staffUnique.has("waiter"));
+console.log(staffUnique);
+console.log(staffUniqueArray);
+console.log(staffUnique.size);
+```
+
+![](images/2022-07-21-23-42-41.png)
+
+## map
+
+key와 value 쌍을 만들 수 있다. set으로 설정하게 되는데 이때 set chain을 만들 수 있다.
+
+```js
+const rest = new Map();
+rest
+  .set("name", "jeyoung")
+  .set("categories", ["Italian", "Pizzeria", "Vegetarian", "Organic"])
+  .set("open", 9)
+  .set("close", 23)
+  .set(true, "We are open")
+  .set(false, "We are close");
+
+const time = 14;
+console.log(rest.get(time > rest.get("open") && time < rest.get("close")));
+```
+
+다음과 같이 존재 여부를 확인 할 수도 있고, 값을 삭제할 수도 있습니다.
+
+```js
+console.log(rest.has("name"));
+rest.delete("name");
+console.log(rest);
+```
+
+![](images/2022-07-22-00-04-55.png)
+
+배열도 key로 사용할 수 있다. 하지만 primitive 값과 reference 값은 같은 요소가 들어있어도 같은 값이 아니다.
+
+```js
+rest.set([1, 2], "test");
+console.log(rest.has([1, 2])); // false
+const arr = [1, 2, 3];
+rest.set(arr, "test");
+console.log(rest.has(arr)); //true
+```
+
+### querySelector를 mapping
+
+놀랍게도 querySelector를 map의 key로 집어 넣을 수 있다...!
+
+```js
+rest.set(document.querySelector("h1"), "test");
+console.log(rest);
+```
+
+![](images/2022-07-22-00-23-25.png)

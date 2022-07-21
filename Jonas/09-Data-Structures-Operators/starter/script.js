@@ -46,6 +46,37 @@ const restaurant = {
     console.log('order');
   },
 };
+const staff = ['waiter', 'waiter', 'waiter', 'chef', 'chef', 'manager'];
+const staffUnique = new Set(staff);
+const staffUniqueArray = [...staffUnique];
+staffUnique.add('costomer');
+staffUnique.delete('waiter');
+
+const rest = new Map();
+rest
+  .set('name', 'jeyoung')
+  .set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'])
+  .set('open', 9)
+  .set('close', 23)
+  .set(true, 'We are open')
+  .set(false, 'We are close');
+// console.log(rest);
+// const time = 14;
+// console.log(rest.get(time > rest.get('open') && time < rest.get('close')));
+// console.log(rest.has('name'));
+// rest.delete('name');
+// console.log(rest);
+rest.set([1, 2], 'test');
+console.log(rest.has([1, 2])); // false
+const arr = [1, 2, 3];
+rest.set(arr, 'test');
+console.log(rest.has(arr)); //true
+rest.set(document.querySelector('h1'), 'test');
+console.log(rest);
+// console.log(staffUnique.has('waiter'));
+// console.log(staffUnique);
+// console.log(staffUniqueArray);
+// console.log(staffUnique.size);
 // const keys = Object.keys(restaurant);
 // const values = Object.values(restaurant);
 // const openDays = Object.entries(openingHours);
