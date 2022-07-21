@@ -37,7 +37,9 @@ Execution : 기계 코드는 즉시 실행 (Call Stack 에서)
 
 Optimization : 최적화 (실행 도중에)
 
-![](images/2022-07-17-21-16-20.png)
+<img src="C:\Users\bullj\AppData\Roaming\Typora\typora-user-images\image-20220721120255056.png" alt="image-20220721120255056" style="zoom: 25%;" />
+
+<img src="images/2022-07-17-21-16-20.png" style="zoom: 33%;" />
 
 최적화를 시키고 실행을 하면 느려진다. 따라서 가능한 한 빨리 실행을 시작할 수 있도록 최적화되지 않은 기계어 코드 버전을 만든다.
 그 다음 백그라운드에서 이 코드를 최적화한다. 이미 실행 중인 프로그램이 실행되는 동안 다시 컴파일된다. 최적화 후에 최적화되지 않은 코드는 단순히 스윕된다.
@@ -51,7 +53,11 @@ parsing, compilation, optimization은 코드가 접근할 수 없는 특별한 �
 런타임은 항상 자바스크립트 엔진 (엔진이 없으면 런타임도 없다.) 하지만 엔진으론 충분하지 않고 web api에 대한 접근 권한이 필요함. (DOM, Timer, fetch ...) 이런 웹api는 런타임의 일부이다.
 
 자바스크립트 런타임은 또한 Callback queue를 포함한다. 실행준비가 된 모든 콜백함수를 포함하는 데이터 구조인데, 예를들어 이벤트 리스터 같은 함수들은 콜백함수이다. 콜백함수가 실행이되면 콜백 큐에 놓이게 되고 Call Stack이 비어 아무것도 없다면 콜백 큐에서 콜백함수가 스택으로 전달이 된다. 이것을 `이벤트 루프`라고 부른다.
-![](images/2022-07-17-21-49-28.png)
+
+<img src="C:\Users\bullj\AppData\Roaming\Typora\typora-user-images\image-20220721115853561.png" alt="image-20220721115853561" style="zoom: 25%;" />
+
+<img src="images/2022-07-17-21-49-28.png" style="zoom:50%;" />
+
 이 이벤트 루프는 자바스크립트를 non-blocking으로 만든다.
 
 node js 의 런타임 같은 경우에는 web apis 가 없고 그 자리에 c++ bindings & thread pool 이 있다.
@@ -100,7 +106,7 @@ block scope라는 것은 es6이후 도입되었으므로 es6 변수인 let과 co
 scope chain이라는 것은 바깥에서 정의된 변수들을 안쪽 스코프에서 사용할 수 있음을 말한다.
 다음 사진을 보면 이해할 수 있다. 해당 scope에서 변수를 찾을 수 없는 경우 scope chain을 따라 위쪽으로 이동하면서 global scope까지 올라간다. 그 때까지 변수를 찾지못하면 reference error가 생긴다. 그리고 이 방향성은 단방향이다 바깥쪽 함수에서 안쪽에 있는 변수를 이용하진 못한다.
 
-![](images/3tyoe.png)
+<img src="images/3tyoe.png"  />
 ![](images/2022-07-18-00-12-21.png)
 
 주의할 점이 있는데 call stack과 scope chain은 무관하다는 것이다. 아래 사진을 보면 third는 second안에서 실행되었지만 scope가 first와 평행하기 때문에 변수에 접근할 수 없다
@@ -153,7 +159,7 @@ let b = 2;
 const c = 3;
 ```
 
-![](images/2022-07-18-17-04-29.png)
+<img src="images/2022-07-18-17-04-29.png" style="zoom:50%;" />
 
 함수의 경우를 보자.
 
@@ -173,7 +179,7 @@ const addExp = function (a, b) {
 const addArr = (a, b) => a + b;
 ```
 
-![](images/2022-07-18-17-07-51.png)
+<img src="images/2022-07-18-17-07-51.png" style="zoom:50%;" />
 
 그렇다면 var로 초기화 하면 호이스팅 되지 않을까?
 
@@ -193,7 +199,7 @@ var addExp = function (a, b) {
 var addArr = (a, b) => a + b;
 ```
 
-![](images/2022-07-18-17-08-52.png)
+<img src="images/2022-07-18-17-08-52.png" style="zoom:50%;" />
 
 호이스팅 되기는 하지만 undefined이기 떄문에 함수로 판단하지 못하고 undefined(1,2); 를 하는 것과 같이 된다.
 
@@ -238,7 +244,8 @@ const calcAgeArrow = (birthYear) => {
 calcAgeArrow(1980);
 ```
 
-![](images/2022-07-18-18-12-46.png)
+<img src="images/2022-07-18-18-12-46.png" style="zoom:50%;" />
+
 그냥 this를 호출하면 this를 호출하는 객체이므로 window가 나오는게 맞다.
 strict모드를 사용하고 있으므로 함수 내부에서 this 를 호출 했을 때는 정의되지 않는게 맞다.
 arrow 함수에서는 자체 this 키워드가 없으므로 상위 객체의 this를 갖는다. 전역에서 호출한것과 같이 window가 나온다.
@@ -262,7 +269,7 @@ const f = b.showObject;
 f();
 ```
 
-![](images/2022-07-18-19-13-43.png)
+<img src="images/2022-07-18-19-13-43.png" style="zoom:50%;" />
 
 #
 
@@ -285,7 +292,7 @@ me.printNameArr();
 me.printNameDecl();
 ```
 
-![](images/2022-07-18-19-30-52.png)
+<img src="images/2022-07-18-19-30-52.png" style="zoom:50%;" />
 
 var 변수를 정의 하였을 경우 다음과 같은 결과를 얻게 된다.
 
@@ -305,7 +312,7 @@ me.printNameArr();
 me.printNameDecl();
 ```
 
-![](images/2022-07-18-19-32-55.png)
+<img src="images/2022-07-18-19-32-55.png" style="zoom:50%;" />
 
 ## 함수 내에서 함수를 호출할 때 this
 
@@ -327,7 +334,7 @@ const me = {
 me.printName();
 ```
 
-![](images/2022-07-18-19-40-31.png)
+<img src="images/2022-07-18-19-40-31.png" style="zoom:50%;" />
 
 이것을 해결하기 위한 방법은 두가지가 있다.
 
@@ -378,11 +385,13 @@ const addExpr = function (a, b) {
 console.log(addExpr(1, 2));
 ```
 
-![](images/2022-07-18-20-46-30.png)
+<img src="images/2022-07-18-20-46-30.png" style="zoom:50%;" />
+
 그리고 실제로 인수를 더 많이 넣었을 때 arguments 키워드를 이용하여 조회할 수 있다.
 
 하지만 이는 arrow 함수에는 존재하지 않는다.
-![](images/2022-07-18-20-47-27.png)
+
+<img src="images/2022-07-18-20-47-27.png" style="zoom:50%;" />
 
 #
 
@@ -400,4 +409,4 @@ const객체는 그 속성을 변경하는 것은 가능하지만 새로운 객�
 바로 `Object.assign({}, {});` 메소드를 이용하는 것이다. assign 메소드는 두 객체를 병합하여 반환한다. 그러나 객체안의 멤버가 또다시 객체라면 그것은 복사가 이루어질 수 없는 얕은 복사의 방법이다.  
 아래 사진을 보면 LastName은 수정이 되었지만 family는 배열이기 때문에 같은 객체를 가리키고 있다.
 
-![](images/2022-07-18-22-41-55.png)
+<img src="images/2022-07-18-22-41-55.png" style="zoom:50%;" />
