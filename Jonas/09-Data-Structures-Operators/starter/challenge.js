@@ -106,13 +106,23 @@ const buttonEl = document.querySelector('button');
 buttonEl.addEventListener('click', () => {
   const text = textAreaEl.value;
   const textArr = text.split('\n');
-  console.log(textArr);
-  const res=[];
-  for(const i of textArr){
+  const res = [];
+  let maxx = -1;
+  for (const i of textArr) maxx = Math.max(maxx, i.length);
+  for (const i of textArr) {
     const splitText = i.trim().toLowerCase().split('_');
-    const splitTextUpper = []; 
-    for(const j of splitText){
-      splitTextUpper.push(j.)
+    const splitTextUpper = [];
+    for (const j of splitText) {
+      splitTextUpper.push(j.replace(j[0], j[0].toUpperCase()));
     }
+    res.push(splitTextUpper.join('').padEnd(maxx, ' '));
+  }
+  for (const [idx, item] of res.entries()) {
+    console.log(`${item} ${'✅'.repeat(idx + 1)}`);
   }
 });
+
+// more exercise
+const flights = `_Delayed_Departure;fao93766109;txl2133758440;11:25
+  +_Arrival;bru0943384722;
+  fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30`;

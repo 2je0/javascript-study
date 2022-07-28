@@ -108,3 +108,109 @@ checkBaggage("I have a laptop, some Food and a pocket Knife");
 checkBaggage("Socks and camera");
 checkBaggage("Got some snacks and a gun for protection");
 ```
+
+## Split and join
+
+capitalizeName 함수는 띄어쓰기로 구분된 성과 이름의 첫글자만 대문자로 바꾸는것입니다. 나머지는 소문자입니다.
+그러기 위해서는 먼저 모두 소문자로 바꾼 후 split을 이용하여 띄어쓰기를 기준으로 나누고 replace를 이용해 첫번째 문자만 대문자로 바꿉니다.
+
+```js
+console.log("a+very+nice+string".split("+"));
+console.log("Jonas Schmedtmann".split(" "));
+
+const [firstName, lastName] = "Jonas Schmedtmann".split(" ");
+
+const newName = ["Mr.", firstName, lastName.toUpperCase()].join(" ");
+console.log(newName);
+
+const capitalizeName = function (name) {
+  const names = name.split(" ");
+  const namesUpper = [];
+
+  for (const n of names) {
+    // namesUpper.push(n[0].toUpperCase() + n.slice(1));
+    namesUpper.push(n.replace(n[0], n[0].toUpperCase()));
+  }
+  console.log(namesUpper.join(" "));
+};
+
+capitalizeName("jessica ann smith davis");
+capitalizeName("jonas schmedtmann");
+```
+
+## Padding
+
+padding 메소드를 사용하면 n자리 문자열을 만드는데에 특정문자 또는 문자열을 채워넣을 수 있다.
+예를들어 `1234` 문자열이 마지막으로 들어가는 12자리 문자열 - 카드번호 -를 만들고싶을 때 사용할 수 있다.
+padStart() 메소드를 사용하면 된다.
+
+```js
+const message = "Go to gate 23!";
+console.log(message.padStart(20, "+").padEnd(30, "+"));
+console.log("Jonas".padStart(20, "+").padEnd(30, "+"));
+
+const maskCreditCard = function (number) {
+  const str = number + "";
+  const last = str.slice(-4);
+  return last.padStart(str.length, "*");
+};
+
+console.log(maskCreditCard(64637836));
+console.log(maskCreditCard(43378463864647384));
+console.log(maskCreditCard("334859493847755774747"));
+```
+
+## Repeat
+
+repeat 메소드를 쓰면 특정 문자 또는 문자열을 반복할 수 있다.
+
+```js
+const message2 = "Bad waether... All Departues Delayed... ";
+console.log(message2.repeat(5));
+
+const planesInLine = function (n) {
+  console.log(`There are ${n} planes in line ${"🛩".repeat(n)}`);
+};
+planesInLine(5);
+planesInLine(3);
+planesInLine(12);
+```
+
+## Challenge4
+
+다음과 같은 snake case인 문자열을 가지고 camel case의 문자열을 만들어보자
+
+```
+underscore_case
+ first_name
+Some_Variable
+  calculate_AGE
+delayed_departure
+```
+
+```js
+document.body.append(document.createElement("textarea"));
+document.body.append(document.createElement("button"));
+
+const textAreaEl = document.querySelector("textarea");
+const buttonEl = document.querySelector("button");
+
+buttonEl.addEventListener("click", () => {
+  const text = textAreaEl.value;
+  const textArr = text.split("\n");
+  const res = [];
+  let maxx = -1;
+  for (const i of textArr) maxx = Math.max(maxx, i.length);
+  for (const i of textArr) {
+    const splitText = i.trim().toLowerCase().split("_");
+    const splitTextUpper = [];
+    for (const j of splitText) {
+      splitTextUpper.push(j.replace(j[0], j[0].toUpperCase()));
+    }
+    res.push(splitTextUpper.join("").padEnd(maxx, " "));
+  }
+  for (const [idx, item] of res.entries()) {
+    console.log(`${item} ${"✅".repeat(idx + 1)}`);
+  }
+});
+```
