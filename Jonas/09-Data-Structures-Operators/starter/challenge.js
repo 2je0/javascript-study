@@ -68,3 +68,51 @@
 // for (const player of game.scored) {
 //   scorers[player] ? scorers[player]++ : (scorers[player] = 1);
 // }
+
+// const gameEvents = new Map([
+//   [17, '⚽ GOAL'],
+//   [36, '🔁 Substitution'],
+//   [47, '⚽ GOAL'],
+//   [61, '🔁 Substitution'],
+//   [64, '🔶 Yellow card'],
+//   [69, '🔴 Red card'],
+//   [70, '🔁 Substitution'],
+//   [72, '🔁 Substitution'],
+//   [76, '⚽ GOAL'],
+//   [80, '⚽ GOAL'],
+//   [92, '🔶 Yellow card'],
+// ]);
+
+// const events = new Set([...gameEvents.values()]);
+// console.log(events);
+// gameEvents.delete(64);
+// console.log(gameEvents);
+// console.log(
+//   `An event happened, on average, every ${90 / gameEvents.size} minutes`
+// );
+
+// for (const [key, value] of gameEvents) {
+//   const half = key < 45 ? 'FIRST HALF' : 'SECOND HALF';
+//   console.log(`[${half}]${key}: ${value}`);
+// }
+
+//challenge 4
+document.body.append(document.createElement('textarea'));
+document.body.append(document.createElement('button'));
+
+const textAreaEl = document.querySelector('textarea');
+const buttonEl = document.querySelector('button');
+
+buttonEl.addEventListener('click', () => {
+  const text = textAreaEl.value;
+  const textArr = text.split('\n');
+  console.log(textArr);
+  const res=[];
+  for(const i of textArr){
+    const splitText = i.trim().toLowerCase().split('_');
+    const splitTextUpper = []; 
+    for(const j of splitText){
+      splitTextUpper.push(j.)
+    }
+  }
+});

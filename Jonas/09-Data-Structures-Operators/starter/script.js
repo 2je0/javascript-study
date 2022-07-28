@@ -52,27 +52,49 @@ const staffUniqueArray = [...staffUnique];
 staffUnique.add('costomer');
 staffUnique.delete('waiter');
 
-const rest = new Map();
-rest
-  .set('name', 'jeyoung')
-  .set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'])
-  .set('open', 9)
-  .set('close', 23)
-  .set(true, 'We are open')
-  .set(false, 'We are close');
+// console.log(Object.entries(openingHours));
+const question = new Map([
+  ['question', 'what is the best programming language in the world?'],
+  [1, 'C'],
+  [2, 'Java'],
+  [3, 'Javascript'],
+  ['answer', 3],
+  [true, 'correct'],
+  [false, 'try again'],
+]);
+// console.log(question.get('question'));
+// for (const [key, value] of question) {
+//   if (typeof key === 'number') console.log(`Answer ${key}: ${value}`);
+// }
+// const answer = 3;
+
+// const answer = Number(prompt('your answer? : '));
+// console.log(question.get(answer === question.get('answer')));
+
+// console.log([...question]);
+// console.log(question.entries());
+// console.log(question);
+// const rest = new Map();
+// rest
+//   .set('name', 'jeyoung')
+//   .set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'])
+//   .set('open', 9)
+//   .set('close', 23)
+//   .set(true, 'We are open')
+//   .set(false, 'We are close');
 // console.log(rest);
 // const time = 14;
 // console.log(rest.get(time > rest.get('open') && time < rest.get('close')));
 // console.log(rest.has('name'));
 // rest.delete('name');
 // console.log(rest);
-rest.set([1, 2], 'test');
-console.log(rest.has([1, 2])); // false
-const arr = [1, 2, 3];
-rest.set(arr, 'test');
-console.log(rest.has(arr)); //true
-rest.set(document.querySelector('h1'), 'test');
-console.log(rest);
+// rest.set([1, 2], 'test');
+// console.log(rest.has([1, 2])); // false
+// const arr = [1, 2, 3];
+// rest.set(arr, 'test');
+// console.log(rest.has(arr)); //true
+// rest.set(document.querySelector('h1'), 'test');
+// console.log(rest);
 // console.log(staffUnique.has('waiter'));
 // console.log(staffUnique);
 // console.log(staffUniqueArray);
@@ -138,3 +160,104 @@ console.log(rest);
 // const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
 // // console.log([...menu.entries()]);
 // for (const [idx, item] of menu.entries()) console.log(item);
+// const airline = 'TAP Air Portugal';
+// const plane = 'A320';
+
+// console.log(plane[0]);
+// console.log(plane[1]);
+// console.log(plane[2]);
+// console.log('B737'[0]);
+
+// console.log(airline.length);
+// console.log('B737'.length);
+
+// console.log(airline.indexOf('r'));
+// console.log(airline.lastIndexOf('r'));
+// console.log(airline.indexOf('portugal'));
+
+// console.log(airline.slice(4));
+// console.log(airline.slice(4, 7));
+
+// console.log(airline.slice(0, airline.indexOf(' ')));
+// console.log(airline.slice(airline.lastIndexOf(' ') + 1));
+
+// console.log(airline.slice(-2));
+// console.log(airline.slice(1, -1));
+
+// const checkMiddleSeat = function (seat) {
+//   // B and E are middle seats
+//   const s = seat.slice(-1);
+//   if (s === 'B' || s === 'E') console.log('You got the middle seat 😬');
+//   else console.log('You got lucky 😎');
+// };
+
+// checkMiddleSeat('11B');
+// checkMiddleSeat('23C');
+// checkMiddleSeat('3E');
+
+// console.log(new String('jonas'));
+// console.log(typeof new String('jonas'));
+
+// console.log(typeof new String('jonas').slice(1));
+
+// console.log(airline[0]);
+// console.log(airline[1]);
+
+// console.log(airline.length);
+
+// console.log(airline.toLowerCase());
+// console.log(airline.toUpperCase());
+
+// // Fix capitalization in name
+// const passenger = 'jOnAS'; // Jonas
+// const passengerLower = passenger.toLowerCase();
+// const passengerCorrect =
+//   passengerLower[0].toUpperCase() + passengerLower.slice(1);
+// console.log(passengerCorrect);
+
+// // Comparing emails
+// const email = 'hello@jonas.io';
+// const loginEmail = '  Hello@Jonas.Io \n';
+
+// // const lowerEmail = loginEmail.toLowerCase();
+// // const trimmedEmail = lowerEmail.trim();
+// const normalizedEmail = loginEmail.toLowerCase().trim();
+// console.log(normalizedEmail);
+// console.log(email === normalizedEmail);
+
+// // replacing
+// const priceGB = '288,97£';
+// const priceUS = priceGB.replace('£', '$').replace(',', '.');
+// console.log(priceUS);
+
+// const announcement =
+//   'All passengers come to boarding door 23. Boarding door 23!';
+
+// console.log(announcement.replace('door', 'gate'));
+// // console.log(announcement.replaceAll('door', 'gate'));
+// console.log(announcement.replace(/door/g, 'gate'));
+
+// // Booleans
+// const plane = 'Airbus A320neo';
+// console.log(plane.includes('A320'));
+// console.log(plane.includes('Boeing'));
+// console.log(plane.startsWith('Airb'));
+
+// if (plane.startsWith('Airbus') && plane.endsWith('neo')) {
+//   console.log('Part of the NEW ARirbus family');
+// }
+
+// // Practice exercise
+// const checkBaggage = function (items) {
+//   const baggage = items.toLowerCase();
+
+//   if (baggage.includes('knife') || baggage.includes('gun')) {
+//     console.log('You are NOT allowed on board');
+//   } else {
+//     console.log('Welcome aboard!');
+//   }
+// };
+
+// checkBaggage('I have a laptop, some Food and a pocket Knife');
+// checkBaggage('Socks and camera');
+// checkBaggage('Got some snacks and a gun for protection');

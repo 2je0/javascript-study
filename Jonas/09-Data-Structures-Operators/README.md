@@ -531,3 +531,60 @@ console.log(rest);
 ```
 
 ![](images/2022-07-22-00-23-25.png)
+
+## map iterator
+
+다음과 같이 `openingHours`의 entries를 나타내면 이차원 배열의 형태로 나타난다.
+![](images/2022-07-22-02-56-55.png)
+그런데 map 또한 다음과 같이 이차원 배열로 초기화 할수가 있다.
+그 밑과 같이 map을 활용할 수도 있다.
+map을 다시 이차원 배열로 바꾸는 방법은 ...연산자를 활용하는 것이다.
+
+```js
+console.log(Object.entries(openingHours));
+const question = new Map([
+  ["question", "what is the best programming language in the world?"],
+  [1, "C"],
+  [2, "Java"],
+  [3, "Javascript"],
+  ["answer", 3],
+  [true, "correct"],
+  [false, "try again"],
+]);
+console.log(question.get("question"));
+for (const [key, value] of question) {
+  if (typeof key === "number") console.log(`Answer ${key}: ${value}`);
+}
+const answer = 3;
+
+// const answer = Number(prompt('your answer? : '));
+console.log(question.get(answer === question.get("answer")));
+
+console.log([...question]);
+console.log(question.entries());
+console.log(question);
+```
+
+# 언제 무슨 자료구조를 사용해야 하는가 ?
+
+데이터는 세곳에서 나온다.
+
+1. 코딩 하다가 나오는 데이터 (우리가 쓰는, )
+2. 사용자가 입력하는 데이터
+3. api에서 가지고 오는 데이터 .
+   그럴 때 데이터를 어디엔가 저장해야하는데 단순히 배열구조로 데이터를 저장해도 된다면 array/set에 저장하고 key:values 값을 할당해야 한다면 object/map이 적절하다.
+   ![](images/2022-07-22-03-08-06.png)
+   그리고 이제 array와 set을 나누어보자
+
+- 중복이 허용 -> array
+- 중복 허용x -> set
+- 더 나은 성능 -> set
+- 잦은 내부 조작 -> array
+
+object와 map을 나누자면
+
+- 더 나은 성능 -> map
+- json 데이터 저장 -> object
+- 메소드 this 키워드 이용 -> object
+- key를 모든 타입으로 지정할 수 있다. -> map
+  ![](images/2022-07-22-03-09-50.png)
