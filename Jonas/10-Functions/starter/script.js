@@ -57,13 +57,33 @@
 // newPassport(jonas);
 // checkIn(flight, jonas);
 
-const addTax = rate => value => value * (1 + rate);
+// const addTax = rate => value => value * (1 + rate);
 
-const addVAT = addTax(0.23);
-console.log(addVAT(100));
+// const addVAT = addTax(0.23);
+// console.log(addVAT(100));
 
-const addTaxRate = function (rate) {
-  return function (value) {
-    return value + value * rate;
+// const addTaxRate = function (rate) {
+//   return function (value) {
+//     return value + value * rate;
+//   };
+// };
+let f;
+
+const g = function () {
+  const a = 1;
+  f = function () {
+    console.log(a * 2);
   };
 };
+
+const h = function () {
+  const b = 2;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+g();
+let ff = f;
+h();
+ff();
+f();

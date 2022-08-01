@@ -300,3 +300,178 @@ const addVAT2 = addTaxRate(0.23);
 console.log(addVAT2(100));
 console.log(addVAT2(23));
 ```
+
+# challenge 1
+
+회고 :
+
+- 배열을 출력할 때, join 메소드를 이용하면 자유롭게 출력할 수 있다.
+- typedef ... 에러핸들링 해야한다.
+- addEventListener 사용할 땐 bind 사용해야 한다.
+- 새로운 배열 출력하고 싶으면 call 메소드를 사용하되 새로운 객체를 만들어서 사용한다.
+
+```js
+const poll = {
+  question: "What is your favourite programming language?",
+  options: ["0: JavaScript", "1: Python", "2: Rust", "3:C++"],
+  // This generates [0, 0, 0, 0]. More in the next section!
+  answers: new Array(4).fill(0),
+  displayResults(type = "string") {
+    if (type === "string") {
+      console.log(`Poll results are ${this.answers}.`);
+    } else if (type === "array") {
+      console.log(this.answers);
+    }
+  },
+  registerNewAnswer() {
+    const answer = Number(
+      prompt(`${this.question}\n${this.options.join("\n")}`)
+    );
+    typeof answer === "number" &&
+      +answer < this.options.length &&
+      this.answers[+answer]++;
+    this.displayResults();
+    this.displayResults("string");
+  },
+};
+
+document
+  .querySelector(".poll")
+  .addEventListener("click", poll.registerNewAnswer.bind(poll));
+
+const data1 = [1, 2, 3, 4, 5, 6];
+poll.displayResults.call({ answers: data1 });
+poll.displayResults.call({ answers: data1 }, "array");
+```
+
+## Immediately Invoked Function Expression(IIFE)
+
+함수로 만들어서 실행시키면 재사용이가능하다.  
+하지만 익명함수를 만든다면 실행할 수가 없는데 이때 `(function(...))();` 처럼 괄호로 감싼다면 실행시킬 수 있다.  
+딱 한번만 실행시키는 함수인 것이다. 이는 스코프 내부에서 변수를 보호하기 위해 만들어졌다.
+
+```js
+const runOnce = function () {
+  console.log("This will never run again");
+};
+runOnce();
+
+// IIFE
+(function () {
+  console.log("This will never run again");
+  const isPrivate = 23;
+})();
+
+// console.log(isPrivate);
+
+(() => console.log("This will ALSO never run again"))();
+
+{
+  const isPrivate = 23;
+  var notPrivate = 46;
+}
+// console.log(isPrivate);
+console.log(notPrivate);
+```
+
+# Closures
+
+![](images/2022-08-02-02-09-50.png)
+다음 코드와 같이 `secureBooking` 이라는 실행컨텍스트가 사라져도 booker를 실행하면 passengerCount라는 변수에 접근할 수가 있다.  
+이는 클로저라고 하는 함수의 속성이다.  
+함수가 태어난 곳을 기억하고 스코프안에서 해당 변수가 없을때 스코프 체인보다도 클로저를 먼저 확인하게 된다. 다시말해서 `passengerCount`라는 전역변수가 있더라도 클로저의 변수를 먼저 찾게 된다는 것이다.  
+`console.dir(booker);`을 하면 스코프 체인을 볼 수가 있따.
+클로저는 완전히 자동으로 생성되고 명시적으로 액세스할 수 있는 방법이 없습니다.
+우리가 접근할 수 있는 객체와 같은 형태가 아니므로 클로저에 도달할 수 없습니다
+다만 클로저가 발생하는 것을 관찰할 수 있습니다.
+
+```js
+const secureBooking = function () {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers`);
+  };
+};
+
+const booker = secureBooking();
+
+booker();
+booker();
+booker();
+
+console.dir(booker);
+```
+
+## closer 예시
+
+### Example 1
+
+let 변수 f는 g함수안에서 정의가 된다. 이후 g 함수를 실행시킨 후에 f 를 실행시키면 g안에서의 변수 a=23을 기억하고 f();는 46을 반환한다.  
+자동으로 클로저가 생성되었고, f가 태어난곳을 기억하여 변수를 찾은것이다.  
+h함수를 통해 f를 변경시키면 새로운 클로저가 생기고 이전에 있던 클로저는 잃어버리게 된다.
+
+```js
+let f;
+
+const g = function () {
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+g();
+f();
+console.dir(f);
+
+// Re-assigning f function
+h();
+f();
+console.dir(f);
+```
+
+### Example 2
+
+대표적인 예로 setTimeout 함수가 클로저를 설명하기 좋다.  
+왜냐하면 setTimeout 를 호출하는 함수가 끝난 후에 setTimeout 안에 있던 콜백 함수가 실행되어야하기 때문이다.  
+따라서 setTimeout은 클로저가 형성되어있고 함수가 종료된 이후에도 많은 변수를 찾아서 함수를 실행시킬 수가 있다.
+
+```js
+const boardPassengers = function (n, wait) {
+  const perGroup = n / 3;
+
+  setTimeout(function () {
+    console.log(`We are now boarding all ${n} passengers`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers`);
+  }, wait * 1000);
+
+  console.log(`Will start boarding in ${wait} seconds`);
+};
+
+const perGroup = 1000;
+boardPassengers(180, 3);
+```
+
+### Example 3
+
+IIFE를 이용하여 header 변수를 없앤 경우에도 이벤트리스너를 등록해놓는다면 추후 사용할 수있다.  
+이것도 클로저로 설명이 가능하다.
+
+```js
+(function () {
+  const header = document.querySelector("h1");
+  header.style.color = "red";
+  header.addEventListener("click", () => {
+    header.style.color = "blue";
+  });
+})();
+```
