@@ -1,3 +1,5 @@
+[TOC]
+
 ## Simple Array Methods
 
 ```js
@@ -334,3 +336,155 @@ console.log(accounts);
 const account = accounts.find((acc) => acc.owner === "Jessica Davis");
 console.log(account);
 ```
+
+## some and every
+
+includes 메소드를 사용하면 단순히 배열안에 어떤 값과 `일치` 하는지 여부를 bool 형태로 반환한다.  
+하지만 조건을 만들어서 boolean형태로 반환하기 위해선 some과 every 메소드를 사용하면 된다.  
+some 메소드는 조건에 맞는 요소가 하나라도 있으면 true를 반환하고  
+every 메소드는 조건에 모두 맞아야 true를 반환한다.
+콜백함수를 항상 익명함수로 작성할 필요는 없다.
+
+```js
+// EQUALITY
+console.log(movements.includes(-130));
+
+// SOME: CONDITION
+console.log(movements.some((mov) => mov === -130));
+
+const anyDeposits = movements.some((mov) => mov > 0);
+console.log(anyDeposits);
+
+// EVERY
+console.log(movements.every((mov) => mov > 0));
+console.log(account4.movements.every((mov) => mov > 0));
+
+// Separate callback
+const deposit = (mov) => mov > 0;
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+```
+
+## flat and flatMap
+
+중첩 배열안에서 중첩된 요소들을 꺼내고 싶을 때, flat이라는 메소드를 사용한다.  
+flat()을 한번 사용하게되면 1수준의 배열들이 나오게된다. flat(2)를 호출하면 2수준까지 끌어낼 수 있다.  
+실사용례는 아래와 같다.  
+여러 배열들을 한군데에 넣고 배열을 풀어서 합을 구하는 로직인데, map을 써서 배열을 묶고 flat으로 푼다.  
+그런데 이를 한번에 해주는 메소드가 있는데 flatMap이다. 하지만 이 메소드는 1수준의 배열만 flat시킬 수 있다.
+
+```js
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat(2));
+
+// flat
+const overalBalance = accounts
+  .map((acc) => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance);
+
+// flatMap
+const overalBalance2 = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance2);
+```
+
+## Sorting Arrays
+
+그냥 sort 메소드를 사용하면 (콜백 함수없이) 알파벳 오름차순으로 정렬을 한다.  
+숫자를 넣어도 마찬가지로 문자열을 취급하는 것처럼 정렬을 한다.  
+숫자를 정렬하고 싶으면 콜백함수를 만들어야하는데, return 값이 양수면 swap 하고 음수면 그대로 두는 방식이다.  
+인자는 a, b를 받는다. 만약 오름차순으로 정렬하고 싶다면 a,b 가 있을 때 b가 더 커야한다. 따라서 `a < b` 일때는 -1을 리턴해주고 `a > b` 일 때는 1을 반환해주면 된다. 간단하게 `a-b`를 반환하는 방법도 있다.
+
+```js
+// Strings
+const owners = ["Jonas", "Zach", "Adam", "Martha"];
+console.log(owners.sort());
+console.log(owners);
+
+// Numbers
+console.log(movements);
+
+// return < 0, A, B (keep order)
+// return > 0, B, A (switch order)
+
+// Ascending
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (a < b) return -1;
+// });
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+// Descending
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (a < b) return 1;
+// });
+movements.sort((a, b) => b - a);
+console.log(movements);
+```
+
+## More Ways of Creating and Filling Arrays
+
+`new Array()` 를 사용하여 새로운 array를 만들 수 있다.  
+`new Array(1,2,3)` 이면 [1,2,3] 의 배열이 만들어지지만 `new Array(7)`은 7칸의 빈 배열을 만들어낸다.  
+그 빈 배열은 fill 메소드로 채울 수 있다. 물론 비어있지 않아도 채울 수있다.
+`array.fill(1,3,5)`는 1로 [3,5) 칸을 채우겠다는 뜻이다.
+
+```js
+const arr = [1, 2, 3, 4, 5, 6, 7];
+console.log(new Array(1, 2, 3, 4, 5, 6, 7));
+
+// Emprty arrays + fill method
+const x = new Array(7);
+console.log(x);
+// console.log(x.map(() => 5));
+x.fill(1, 3, 5);
+x.fill(1);
+console.log(x);
+
+arr.fill(23, 2, 6);
+console.log(arr);
+```
+
+## Array.from
+
+배열을 만드는 더 좋은 방법은 Array.from을 사용하는 것이다.
+첫번째인자로는 iterable을 받고 두번째 인자로는 콜백 함수를 받는다. 다음 보이는 예시처럼 {length:7} 을 첫번째 인자로 넣으면 길이가 7인 배열이 생성된다.  
+그리고 콜백함수가 반환하는 값으로 채워준다. 콜백함수의 인자는 map과 같다. (cur, idx, arr) 이다.
+
+```js
+const y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+
+const z = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log(z);
+```
+
+### iterable
+
+![](images/2022-08-18-03-29-02.png)
+위와같은 사진에서 movement의 값들이 배열로 저장되어있지 않다면 querySelector와 Array.from을 이용해서 배열을 만들 수 있다.  
+Array.from()의 첫번째 인자로 `NodeList`인 querySelectorAll을 집어넣어준다.  
+그리고 이후 map을 사용해서 그 값들을 배열에 넣어도 되지만 두번째 인자인 콜백함수를 통해서도 가능하다.
+
+```js
+labelBalance.addEventListener("click", function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll(".movements__value"),
+    (el) => Number(el.textContent.replace("€", ""))
+  );
+  console.log(movementsUI);
+
+  const movementsUI2 = [...document.querySelectorAll(".movements__value")];
+});
+```
+
+![](images/2022-08-18-16-06-56.png)
